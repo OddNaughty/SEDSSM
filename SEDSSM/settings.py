@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'swag',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -76,12 +77,14 @@ WSGI_APPLICATION = 'SEDSSM.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'SEDSSM',
-        'USER': 'swag',
-        'PASSWORD': 'MilamonerSWAG666',
-        'HOST': 'localhost',
-        'PORT': '',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'SEDSSM',
+        # 'USER': 'swag',
+        # 'PASSWORD': 'MilamonerSWAG666',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 

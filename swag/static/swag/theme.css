@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'main'; /*a name to be used later*/
+    src: url('MonoglycerideExtraBold.ttf'); /*URL to font*/
+}
+
+html {
+  background: url(images/swag.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    font-family: 'main';
+}
+
+body {
+    width: 100%;
+    height: auto;
+    bottom: 0px;
+    top: 0px;
+    left: 0;
+    position: absolute;
+}
+
+#swag {
+    position: absolute;
+    /*width: 10%;*/
+    /*height: 300px;*/
+    font-size: 500%;
+    top: 30%;
+    left: 20%;
+    /*position: fixed;*/
+    /*height: 40%;*/
+    color: 		#4b3832;
+}
