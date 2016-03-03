@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YTDL</title>
+    {% load staticfiles %}
+    <script src="{% static 'swag/downloadfile.js' %}"></script>
+</head>
+<body>
+{% if file %}
+<a href="{{ file }}" download>Fichier sa mere</a>
+{% endif %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Send message" />
+</form>
+</body>
+<script>
+    var file = "{{ file }}";
+    console.log(file);
+    if (file) {
+        downloadFile(file);
+    }
+</script>
+</html>

@@ -5,6 +5,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^test/$', TemplateView.as_view(template_name='index.html'), name="test"),
-
+    url(r'^youtube', views.YoutubeView.as_view(), name="youtube")
 ]
