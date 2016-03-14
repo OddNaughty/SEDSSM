@@ -64,4 +64,7 @@ class YoutubeView(View):
         file.save()
         newpath = os.path.join(os.path.dirname(path), newdatas['title'][0] + ".mp3")
         os.rename(path, newpath)
-        return ("swag/" + newdatas['title'][0] + ".mp3")
+        if settings.DEBUG is True:
+            return ("swag/" + newdatas['title'][0] + ".mp3")
+        else:
+            return (newdatas['title'][0] + ".mp3")
