@@ -8,7 +8,7 @@
 </head>
 <body>
 {% if file %}
-<a href="{{ file }}" download>Fichier sa mere</a>
+<a href="{% static file %}" download>Fichier sa mere</a>
 {% endif %}
 <form action="" method="post">
     {% csrf_token %}
@@ -17,9 +17,10 @@
 </form>
 </body>
 <script>
-    var file = "{{ file }}";
+    {% load myfilters %}
+    var file = decodeURIComponent("{% static file %}");
     console.log(file);
-    if (file) {
+    if (file !== "/static/") {
         downloadFile(file);
     }
 </script>
