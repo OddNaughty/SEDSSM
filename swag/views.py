@@ -24,6 +24,7 @@ class YoutubeView(View):
         print ("POST: ", request.POST)
         form = self.form_class(request.POST)
         if form.is_valid():
+            print (form.cleaned_data)
             ydl_opts = {
                 'outtmpl': os.path.join(settings.MP3_FILE_TMP, "%(title)s.%(ext)s"),
                 'format': 'bestaudio/best',
@@ -36,18 +37,19 @@ class YoutubeView(View):
             }
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 datas = ydl.extract_info(form.cleaned_data['url'])
-            download_file = self.add_file_infos(os.path.join(settings.PROJECT_PATH, settings.MP3_FILE_TMP, datas['title'] + ".mp3"), datas)
+            download_file = self.add_file_infos(os.path.join(settings.PROJECT_PATH, settings.MP3_FILE_TMP, datas['title'] + ".mp3"), datas, form.cleaned_data)
             test = DownloadedSongs(url=form.cleaned_data['url'])
             test.save()
             return render(request, self.template_name, {'form': form, 'file': download_file})
+            return render(request, self.template_name, {'form': form})
         return render(request, self.template_name, {'form': form})
 
-    def add_file_infos(self, path, datas):
+    def add_file_infos(self, path, yt_datas, user_datas):
         """
         Edit the mp3 file (filename) metadatas
         return the full path
         """
-        filename = datas['title']
+        filename = yt_datas['title']
         datas = filename.split(' - ')
         try:
             file = EasyID3(path)
@@ -55,16 +57,16 @@ class YoutubeView(View):
             file = mutagen.File(path, easy=True)
             file.add_tags()
         newdatas = {
-            "title": [(datas[2] if len(datas) > 2 else datas[1])],
-            "artist": [(datas[1] if len(datas) > 2 else datas[0])]
+            "title": user_datas['title'] or [(datas[2] if len(datas) > 2 else datas[1])],
+            "artist": user_datas['artist'] or [(datas[1] if len(datas) > 2 else datas[0])]
         }
         for k in newdatas.keys():
             file[k] = newdatas[k]
         print (file)
         file.save()
-        newpath = os.path.join(os.path.dirname(path), newdatas['title'][0] + ".mp3")
-        os.rename(path, newpath)
-        if settings.DEBUG is True:
-            return ("swag/" + newdatas['title'][0] + ".mp3")
+        # newpath = os.path.join(os.path.dirname(path), datas['title'][0] + ".mp3")
+        # os.rename(path, newpath)
+        if settings.DEBUG == True:
+            return ("swag/" + filename + ".mp3")
         else:
-            return (newdatas['title'][0] + ".mp3")
+            return (filename + ".mp3")

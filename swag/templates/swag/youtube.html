@@ -5,6 +5,7 @@
     <title>YTDL</title>
     {% load staticfiles %}
     <script src="{% static 'swag/downloadfile.js' %}"></script>
+    <script src="{% static 'swag/bower_components/jquery/dist/jquery.min.js' %}"></script>
 </head>
 <body>
 {% if file %}
@@ -18,10 +19,40 @@
 </body>
 <script>
     {% load myfilters %}
-    var file = decodeURIComponent("{% static file %}");
-    console.log(file);
-    if (file !== "/static/") {
+    var file = decodeURIComponent("{% static file %}"),
+        ytApi = "AIzaSyAotd390ChjpccFTAAQEjYrBbzCUOXSXUU",
+        urlField = $("form p").find("input[name=url]"),
+        artistField = $("form p").find("input[name=artist]"),
+        titleField = $("form p").find("input[name=title]");
+
+    if (file && file !== "/static/") {
         downloadFile(file);
+    }
+
+    urlField.change(function () {
+        videoId = getParameters($(this).val(), "v");
+        datas = {"id": videoId, "key": ytApi, "part": "snippet"};
+        var api = "https://www.googleapis.com/youtube/v3/videos";
+        $.get(api, datas, function (d) {
+            var t = d.items[0].snippet.title;
+            artistField.val(t.split(' - ')[0]);
+            titleField.val(t.split(' - ')[1]);
+        });
+    });
+
+    function getParameters(url, sParam) {
+        var sURLVariables = url.split('?')[1].split('&'),
+            sParameterName,
+            i;
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+            console.log(sURLVariables);
+
+            if (sParameterName[0] === sParam) {
+                console.log(sParameterName);
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
     }
 </script>
 </html>
